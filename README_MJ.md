@@ -11,7 +11,7 @@ docker run -it --name musicvae --gpus all musicvae
 
 ## Local
 ```bash
-# crate conda env
+# create conda env
 conda create --name magenta python=3.7
 conda acitvate magneta
 
