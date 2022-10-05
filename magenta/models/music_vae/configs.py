@@ -642,3 +642,31 @@ CONFIG_MAP['groovae_2bar_hits_control_tfds'] = Config(
         inference_pitch_classes=data.REDUCED_DRUM_PITCH_CLASSES),
     tfds_name='groove/2bar-midionly'
 )
+
+CONFIG_MAP['musicvae_groove_4bar'] = Config(
+    model=MusicVAE(
+        lstm_models.BidirectionalLstmEncoder(),
+        lstm_models.HierarchicalLstmDecoder(
+            lstm_models.CategoricalLstmDecoder(),
+            level_lengths=[4, 4])
+        ),
+    hparams=merge_hparams(
+        lstm_models.get_default_hparams(),
+        HParams(
+            batch_size=512,
+            max_seq_len=4 * 4,
+            z_size=512,
+            enc_rnn_size=[2048],
+            dec_rnn_size=[1024, 1024],
+            max_beta=0.2,
+            free_bits=48,
+            dropout_keep_prob=0.3,
+        )),
+    note_sequence_augmenter=None,
+    data_converter=data.DrumsConverter(
+        max_bars=100,  # Truncate long drum sequences before slicing.
+        slice_bars=4,
+        steps_per_quarter=4,
+        roll_input=True),
+    train_examples_path="./preprocessed_datasets/groove_train.tfrecord",  # the tfrecord file path
+    eval_examples_path="./preprocessed_datasets/groove_val.tfrecord" # the eval tfrecord file path
