@@ -23,7 +23,7 @@ RUN wget https://repo.continuum.io/miniconda/Miniconda3-py37_4.9.2-Linux-x86_64.
     rm Miniconda.sh
 ENV PATH /opt/miniconda3/bin:$PATH
 
-RUN git clone https://github.com/work82mj/magenta
+RUN git clone -b music-vae https://github.com/work82mj/magenta
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt
 RUN cd magenta && pip install -e .
